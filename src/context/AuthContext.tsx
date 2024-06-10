@@ -1,10 +1,13 @@
 import { createContext, ReactNode, useContext } from 'react';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
-import { UserType, GoogleLoginRequest } from '../utils/dto/request/userRequest';
 import { axiosInstance } from '../lib/axios';
+import {
+  GoogleLoginRequest,
+  LoginRequest,
+} from '../utils/dto/request/userRequest';
 
 interface AuthContextProps {
-  loginMutation: UseMutationResult<void, unknown, UserType, unknown>;
+  loginMutation: UseMutationResult<void, unknown, LoginRequest, unknown>;
   googleLoginMutation: UseMutationResult<
     void,
     unknown,
@@ -24,8 +27,8 @@ export const useAuth = (): AuthContextProps => {
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const loginMutation = useMutation<void, unknown, UserType, unknown>({
-    mutationFn: async (body: UserType) => {
+  const loginMutation = useMutation<void, unknown, LoginRequest, unknown>({
+    mutationFn: async (body: LoginRequest) => {
       const userResponse = await axiosInstance.post('/auth/login', body);
 
       if (userResponse.status !== 200) {

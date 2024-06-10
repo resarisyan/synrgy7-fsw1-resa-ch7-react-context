@@ -28,9 +28,9 @@ import {
 } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { CarRequest } from '../utils/dto/request/carRequest';
 import { useCar } from '../context/CarContext';
+import { carValidationSchema } from '../utils/validators/car-validation';
 
 export default function CarPage() {
   const toast = useToast();
@@ -42,17 +42,6 @@ export default function CarPage() {
     isLoading: carIsLoading,
     refetch: refetchCars,
   } = fetchCars;
-
-  const validationSchema = Yup.object().shape({
-    plate: Yup.string().required('Plate is required'),
-    manufacture: Yup.string().required('Manufacture is required'),
-    model: Yup.string().required('Model is required'),
-    rentPerDay: Yup.number().required('Rent Per Day is required'),
-    capacity: Yup.number().required('Capacity is required'),
-    description: Yup.string().required('Description is required'),
-    transmission: Yup.string().required('Transmission is required'),
-    year: Yup.number().required('Year is required'),
-  });
 
   const formik = useFormik<CarRequest>({
     initialValues: {
@@ -67,7 +56,7 @@ export default function CarPage() {
       transmission: '',
       year: 0,
     },
-    validationSchema,
+    validationSchema: carValidationSchema,
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
         if (values.id) {
